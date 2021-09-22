@@ -3,10 +3,20 @@ import {Component} from 'react';
 export default class Content extends Component {
     state = {posts: []};
 
+    constructor(props) {
+        super(props);
+        this.onPostsChange = this.onPostsChange.bind(this);
+    }
+
+    onPostsChange(posts) {
+        this.props.onPostsChange(posts);
+    }
+
     onFetchPosts = () => {
         fetch('https://jsonplaceholder.typicode.com/posts')
             .then(fetchResponse => fetchResponse.json())
             .then(json => {
+                this.onPostsChange(json)
                 this.setState({posts: json});
             });
     }
@@ -17,7 +27,7 @@ export default class Content extends Component {
 
     render() {
         return (
-            <div className={'w-full h-full max-h-full text-blue-100 bg-blue-800 pt-12 pb-10'}>
+            <div className={'w-11/12 m-auto pl-2 pr-2 h-full max-h-full overflow-hidden text-blue-100 bg-blue-800 pt-12 pb-10'}>
                 <h2>Fetch posts using state to store it</h2>
                 <br />
                 <span className={'text-gray-200'}>{this.state.posts.length} posts fetched</span>
