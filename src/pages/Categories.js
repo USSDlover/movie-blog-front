@@ -7,6 +7,7 @@ export default function Categories(props) {
         <ul className={'list-disc'}>
             <li className={'text-sm'}>
                 <Link to={`${path}/dram`}>Dram</Link>
+                <Link to={`${path}/action`}>Action</Link>
             </li>
         </ul>
     );
