@@ -1,36 +1,30 @@
-import {Component, Fragment} from 'react';
+import {Component} from 'react';
+
+import {BrowserRouter, Switch, Route} from 'react-router-dom';
 
 import Header from './components/Header';
-import Content from './components/Content';
 import Footer from './components/Footer';
+import Home from './pages/Home';
+import Movies from './pages/Movies';
 
 export default class App extends Component {
 
-    constructor(props) {
-        super(props);
-
-        this.onPostsChange = this.onPostsChange.bind(this);
-        this.state = {posts: []};
-    }
-
-    onPostsChange = (posts) => {
-        this.setState({posts});
-    }
-
-    headerProps = {
-        title: 'Cool APP',
-        favorite_color: 'blue'
-    }
-
   render() {
       return (
-          <Fragment>
-              <Header {...this.headerProps}
-                      posts={this.state.posts}
-                      onPostsChange={this.onPostsChange}/>
-              <Content onPostsChange={this.onPostsChange}/>
+          <BrowserRouter>
+              <Header />
+              <div className={'pt-14 w-11/12 m-auto'}>
+                  <Switch>
+                      <Route path={'/movies'}>
+                          <Movies />
+                      </Route>
+                      <Route path={'/'}>
+                          <Home />
+                      </Route>
+                  </Switch>
+              </div>
               <Footer />
-          </Fragment>
+          </BrowserRouter>
       );
   }
 }
