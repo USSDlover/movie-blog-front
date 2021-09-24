@@ -2,35 +2,45 @@ import {Component, Fragment} from 'react';
 import {Link} from 'react-router-dom';
 
 export default class Movies extends Component {
-    state = {movies: []};
+    state = {
+        movies: [],
+        isLoaded: false
+    };
 
     componentDidMount() {
-        this.setState({
-            movies: [
-                {id: 1, title: 'Superman', runtime: 170},
-                {id: 2, title: 'Bat woman', runtime: 150},
-                {id: 3, title: 'Godfather', runtime: 140},
-            ]
-        })
+        fetch('http://localhost:4000/v1/movies')
+            .then(response => response.json())
+            .then(json => {
+                this.setState({
+                    movies: json.movies,
+                    isLoaded: true
+                })
+            })
     }
 
     render() {
-        return (
-            <Fragment>
-                <h1>Movies</h1>
-                <ul className={'list-disc'}>
-                    {
-                        this.state.movies.map((movie) => (
-                            <li className={'text-sm underline cursor-pointer mt-3'}
-                                key={movie.id}>
-                                <Link to={`/movies/${movie.id}`}>
-                                    {movie.title}
-                                </Link>
-                            </li>
-                        ))
-                    }
-                </ul>
-            </Fragment>
-        );
+        const { isLoaded, movies } = this.state;
+
+        if (!isLoaded) {
+            return <p>Loading...</p>
+        } else {
+            return (
+                <Fragment>
+                    <h1>Movies</h1>
+                    <ul className={'list-disc'}>
+                        {
+                            movies.map((movie) => (
+                                <li className={'text-sm underline cursor-pointer mt-3'}
+                                    key={movie.id}>
+                                    <Link to={`/movies/${movie.id}`}>
+                                        {movie.title}
+                                    </Link>
+                                </li>
+                            ))
+                        }
+                    </ul>
+                </Fragment>
+            );
+        }
     }
 }
