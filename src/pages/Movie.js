@@ -2,39 +2,54 @@ import {Link} from 'react-router-dom';
 import {Component, Fragment} from 'react';
 
 export default class Movie extends Component {
-    state = {movie: {}};
+    state = {
+        movie: {},
+        isLoaded: false
+    };
 
     componentDidMount() {
-        this.setState({
-            movie: {
-                id: this.props.match.params.id,
-                title: 'Some movie',
-                runtime: 150
-            }
-        })
+        const movieId = this.props.match.params.id;
+        fetch(`http://localhost:4000/v1/movie/${movieId}`)
+            .then(response => response.json())
+            .then(json => {
+                this.setState({
+                    movie: json.movie,
+                    isLoaded: true
+                })
+            })
     }
 
     render() {
-        return (
-            <Fragment>
-                <Link to={'/movies'}>
-                    🔙
-                </Link>
-                <br/>
-                <h2>Movie detail for id: {this.state.movie.id}</h2>
-                <table>
-                    <tbody>
-                    <tr>
-                        <td><strong>Title:</strong></td>
-                        <td>{this.state.movie.title}</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Runtime</strong></td>
-                        <td>{this.state.movie.runtime}</td>
-                    </tr>
-                    </tbody>
-                </table>
-            </Fragment>
-        );
+        const {isLoaded, movie} = this.state;
+
+        if (!isLoaded) {
+            return <p>Loading...</p>
+        } else {
+            return (
+                <Fragment>
+                    <Link to={'/movies'}>
+                        🔙
+                    </Link>
+                    <br/>
+                    <h2>Movie detail</h2>
+                    <table>
+                        <tbody>
+                        <tr>
+                            <td><strong>Title:</strong></td>
+                            <td>{movie.title}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Description</strong></td>
+                            <td>{movie.description}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Runtime</strong></td>
+                            <td>{movie.runtime}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </Fragment>
+            );
+        }
     }
 }
