@@ -8,7 +8,7 @@ import Footer from './components/Footer';
 import Home from './pages/Home';
 import Movies from './pages/Movies';
 import Movie from './pages/Movie';
-import Categories from './pages/Categories';
+import Genres from './pages/Genres';
 
 export default class App extends Component {
 
@@ -18,7 +18,7 @@ export default class App extends Component {
               <Header />
               <div className={'pt-14 w-11/12 m-auto'}>
                   <Switch>
-                      <Route path={'/categories'} component={Categories} />
+                      <Route path={'/genres'} component={Genres} />
                       <Route path={'/movies/:id'} component={Movie} />
                       <Route path={'/movies'}>
                           <Movies />
