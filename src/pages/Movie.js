@@ -41,6 +41,12 @@ export default class Movie extends Component {
     render() {
         const {isLoaded, movie, error} = this.state;
 
+        if (movie.genre) {
+            movie.genre = Object.values(movie.genre);
+        } else {
+            movie.genre = [];
+        }
+
         if (error) {
             return <div>Error: {error.message}</div>
         } else if (!isLoaded) {
@@ -49,11 +55,22 @@ export default class Movie extends Component {
             return (
                 <Fragment>
                     <Link to={'/movies'}>
-                        🔙
+                        <p className={'text-gray-800 text-lg'}>{'< Back to list'}</p>
                     </Link>
                     <br/>
-                    <h2>Movie detail</h2>
-                    <table>
+                    <h2>Movie {movie.title} ({movie.year})</h2>
+                    <div className={'row-auto flex justify-between'}>
+                        <div>MPAA Rating: {movie.mpaa_rating}</div>
+                        {
+                            movie.genre.map(genre =>
+                                (<div
+                                    style={{'border-radius': '.5rem'}}
+                                    className={'bg-blue-800 text-center p-1 text-gray-200 text-sm'}>
+                                    {genre}</div>))
+                        }
+                    </div>
+                    <hr className={'my-3'}/>
+                    <table className={'table'}>
                         <tbody>
                         <tr>
                             <td><strong>Title:</strong></td>
