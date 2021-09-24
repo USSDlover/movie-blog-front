@@ -4,25 +4,46 @@ import {Component, Fragment} from 'react';
 export default class Movie extends Component {
     state = {
         movie: {},
-        isLoaded: false
+        isLoaded: false,
+        error: null
     };
 
     componentDidMount() {
         const movieId = this.props.match.params.id;
         fetch(`http://localhost:4000/v1/movie/${movieId}`)
-            .then(response => response.json())
+            .then(response => {
+                if (response.status !== 200) {
+                    let err = Error;
+                    err.message = 'Invalid response code: ' + response.status;
+                    this.setState({ error: err });
+                }
+                return response.json();
+            })
             .then(json => {
                 this.setState({
                     movie: json.movie,
                     isLoaded: true
-                })
+                }, (error) => {
+                    this.setState({
+                        isLoaded: true,
+                        error
+                    });
+                });
             })
+            .catch(err => {
+                this.setState({
+                    isLoaded: true,
+                    error: err
+                });
+            });
     }
 
     render() {
-        const {isLoaded, movie} = this.state;
+        const {isLoaded, movie, error} = this.state;
 
-        if (!isLoaded) {
+        if (error) {
+            return <div>Error: {error.message}</div>
+        } else if (!isLoaded) {
             return <p>Loading...</p>
         } else {
             return (
