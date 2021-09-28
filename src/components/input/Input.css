@@ -1,0 +1,4 @@
+.field {
+    border-radius: 5px;
+    @apply .border-gray-700 .px-3 .py-2
+}
